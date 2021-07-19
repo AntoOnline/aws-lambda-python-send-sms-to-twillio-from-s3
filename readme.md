@@ -21,7 +21,7 @@ Set auth to 'Basic Auth'. Set the username to TWILIO_ACCOUNT_SID. Set the passwo
 6. Set the runtime to 'Python 3.8'
 7. Change the default execution role to: 'Create a new role with basic Lambda permissions'.
 8. Click the 'create function' button.
-9. The function should now be created. Next, click on the 'upload from' button in the code tab, choose zip, and then upload the provided code.
+9. The function should now be created. Next, click on the 'upload from' button in the code tab, choose zip, and then upload the provided code. You will need to download the code and zip it all up some something like 'lambda_function.zip'.
 10. Click on the 'configuration' tab and then the 'environment variables' option.
 11. Add FROM_NUMBER and specify the 'from' number at Twilio.
 12. Add TWILIO_ACCOUNT_SID	and specify your Twilio account ID.
