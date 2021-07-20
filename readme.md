@@ -50,3 +50,9 @@ Set auth to 'Basic Auth'. Set the username to TWILIO_ACCOUNT_SID. Set the passwo
 6. Select the 'put' event type.
 7. Choose the 'Lambda function' destination.
 8. Choose the Lambda function you have created.
+
+## To add other modules ##
+1. Download the modules using ```pip3 install -t package BeautifulSoup4```
+2. Copy the files into this folder.
+3. Zip the code.
+4. Upload to Lambda and deploy.
