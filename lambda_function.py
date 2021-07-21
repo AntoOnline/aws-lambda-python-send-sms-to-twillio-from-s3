@@ -10,14 +10,20 @@
 # Set auth to 'Basic Auth'. Set the username to TWILIO_ACCOUNT_SID. 
 # Set the password to TWILIO_AUTH_TOKEN.
 
+#import json
+import boto3
+import logging
 import os
 import sys
-import json
-import boto3
 import traceback
 import urllib.parse
+
 from pprint import pprint
 from twilio.rest import Client
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
 s3 = boto3.client('s3')
 
 def lambda_handler(event, context):
@@ -37,10 +43,7 @@ def lambda_handler(event, context):
         to_number = urllib.parse.unquote_plus(event['Records'][0]['s3']['object']['key'], encoding='utf-8')
     except:
         traceback.print_exc(file=sys.stdout)
-        return {
-            "state": "error",
-            "error": "Could not read the bucket name or object key. This function must be triggered by an S3 Put event."
-        }
+        raise Exception("Could not read the bucket name or object key. This function must be triggered by an S3 Put event.")
 
     # Read the mesage body from the object
     print('Get object body')
@@ -48,18 +51,15 @@ def lambda_handler(event, context):
         response = s3.get_object(Bucket=bucket, Key=to_number)
         body = response['Body'].read().decode()
 
-        print('To : '+to_number)
-        print('Body : '+body)
+        logger.debug('To : '+to_number)
+        logger.debug('Body : '+body)
     except:
         deleteSMS(bucket,to_number)
         traceback.print_exc(file=sys.stdout)
-        return {
-            "state": "error",
-            "error": "Could not read object body."
-        }
+        raise Exception("Could not read object body.")
 
     # Send the message to Twillio
-    print('Send SMS to Twillio')
+    logger.debug('Send SMS to Twillio')
     try:
         client = Client(account_sid, auth_token)
 
@@ -70,19 +70,16 @@ def lambda_handler(event, context):
                         to=to_number
                     )
 
-        print('Twillio Message ID: ' + message.sid)
+        logger.debug('Twillio Message ID: ' + message.sid)
     except:
         deleteSMS(bucket,to_number)
         traceback.print_exc(file=sys.stdout)
-        return {
-            "state": "error",
-            "error": "Could not read object body."
-        }
+        raise Exception("Could not read object body.")
 
-    print('Delete message from bucket')        
+    logger.debug('Delete message from bucket')        
     deleteSMS(bucket,to_number)
 
-    print('Done')
+    logger.debug('Done')
     return {
         "state": "success",
         "messageSID": message.sid
@@ -94,7 +91,4 @@ def deleteSMS(bucket,to_number):
         s3.delete_object(Bucket=bucket, Key=to_number)
     except:
         traceback.print_exc(file=sys.stdout)
-        return {
-            "state": "error",
-            "error": "Could not delete the object."
-        }
+        raise Exception("Could not delete the object.")
