@@ -56,3 +56,9 @@ Set auth to 'Basic Auth'. Set the username to TWILIO_ACCOUNT_SID. Set the passwo
 2. Copy the files into this folder.
 3. Zip the code.
 4. Upload to Lambda and deploy.
+
+## Want to connect?
+
+Feel free to contact me on [Twitter](https://twitter.com/OnlineAnto), [DEV Community](https://dev.to/antoonline/) or [LinkedIn](https://www.linkedin.com/in/anto-online) if you have any questions or suggestions.
+
+Or just visit my [website](https://anto.online) to see what I do.
